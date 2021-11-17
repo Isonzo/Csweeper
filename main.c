@@ -1,24 +1,28 @@
-#include <stdio.h>
 #include "mine.h"
-#include <ncurses.h>
+#include <time.h>
 int main()
 {	
+	srand(time(NULL));
 	char ch;
-	Tile **board;
+	Tile** board;
 	int MAP_HEIGHT = 8;
 	int MAP_WIDTH = 12;
+
+	// ncurses init functions
 	initscr();
 	noecho();
-	nocbreak();
+	cbreak();
+
 	board = generateMap();
-	refresh();
-	while (true)
+
+	do
 	{
-		if ((ch = getch()) == 'q')
-			break;
+		placeMines(board);
 		printMap(board);
 		refresh();
-	}
+		if ((ch = getch()) == 'q')
+			break;
+	}	while (true);
 	endwin();	
 
 	return 0;

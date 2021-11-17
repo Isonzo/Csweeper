@@ -1,5 +1,7 @@
 #include <stdbool.h>
+#include <ncurses.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct Tile
 {
@@ -13,6 +15,7 @@ typedef struct Tile
 // mine.c functions
 Tile** generateMap(void);
 void printMap(Tile** map);
+void placeMines(Tile** map);
 
 // externs
 extern Tile ** board;
