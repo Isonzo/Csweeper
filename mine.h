@@ -22,8 +22,11 @@ typedef struct Pos
 Tile** generateMap(void);
 void printMap(Tile** map);
 void placeMines(Tile** map);
-void getInput(char ch, Pos * cursor);
+void getInput(char ch, Pos * cursor, Tile** map);
+bool is_tile_mine(Pos* cursor, Tile** map);
 void moveCursor(int y, int x, Pos* cursor);
+void selectTile(Pos* cursor, Tile** map);
+bool is_tile_mine(Pos* cursor, Tile** map);
 Pos* centerPosition(Pos* position);
 void updateCursor(Pos* cursor, Tile** map);
 

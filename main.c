@@ -24,7 +24,7 @@ int main()
 		if ((ch = getch()) == 'q')
 			break;
 		printMap(board);
-		getInput(ch, cursor);
+		getInput(ch, cursor, board);
 		printw("%d, %d", cursor->x, cursor->y);
 		updateCursor(cursor, board);
 		refresh();

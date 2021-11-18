@@ -49,7 +49,7 @@ void placeMines(Tile** map)
 		}
 }
 
-void getInput(char ch, Pos* cursor)
+void getInput(char ch, Pos* cursor, Tile** map)
 {
 	switch (ch)
 	{
@@ -65,6 +65,9 @@ void getInput(char ch, Pos* cursor)
 		case 'h':
 			moveCursor(0, -1, cursor);
 			break;
+		case ' ':
+			selectTile(cursor, map);
+			break;
 	}
 }
 
@@ -74,6 +77,36 @@ void moveCursor(int new_y, int new_x, Pos* cursor)
 		cursor->y += new_y;
 	if (!(cursor->x + new_x < 0 || cursor->x + new_x >= MAP_WIDTH))
 		cursor->x += new_x;
+}
+
+void selectTile(Pos* cursor, Tile** map)
+{
+	if (is_tile_mine(cursor, map))
+		return; // TODO: Game over!
+	int mine_count = 0;
+	// check surrounding tiles and take appropiate action
+	for (int i = -1; i <= 1; ++i)
+		for (int j = -1; j <= 1; ++j)
+		{
+			Pos temp_cursor = *cursor;
+			temp_cursor.y += i;
+			temp_cursor.x += j;
+			if (is_tile_mine(&temp_cursor, map))
+			{
+				mine_count += 1;
+			}
+		}
+	char total_surround_mines = mine_count + '0';
+	map[cursor->y][cursor->x].icon = total_surround_mines;
+}
+
+bool is_tile_mine(Pos* cursor, Tile** map)
+{
+	if ((cursor->y < 0 || cursor->y  >= MAP_HEIGHT))
+		return false;
+	if ((cursor->x < 0 || cursor->x  >= MAP_WIDTH))
+		return false;
+	return map[cursor->y][cursor->x].is_mine;
 }
 
 Pos* centerPosition(Pos* position)
