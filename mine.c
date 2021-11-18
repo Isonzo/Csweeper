@@ -84,12 +84,7 @@ Pos* centerPosition(Pos* position)
 	return position;
 }
 
-void initCursor(Pos* cursor, Tile** map)
-{
-	cursor = centerPosition(cursor);
-}
-
 void updateCursor(Pos* cursor, Tile** map)
 {
-	map[cursor->y][cursor->x].icon = 'C';
+	move(cursor->y, cursor->x);
 }

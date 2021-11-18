@@ -18,7 +18,6 @@ int main()
 	cursor->x = 1;
 	board = generateMap();
 	placeMines(board);
-	//initCursor();
 
 	do
 	{

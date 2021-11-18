@@ -25,6 +25,5 @@ void placeMines(Tile** map);
 void getInput(char ch, Pos * cursor);
 void moveCursor(int y, int x, Pos* cursor);
 Pos* centerPosition(Pos* position);
-void initCursor(Pos* position, Tile** map);
 void updateCursor(Pos* cursor, Tile** map);
 
