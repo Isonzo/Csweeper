@@ -5,23 +5,28 @@ int main()
 	srand(time(NULL));
 	char ch;
 	Tile** board;
-	int MAP_HEIGHT = 8;
-	int MAP_WIDTH = 12;
+	Pos* cursor;
 
 	// ncurses init functions
 	initscr();
 	noecho();
 	cbreak();
 
+	// minesweeper init functions
+	cursor->y = 1;
+	cursor->x = 1;
 	board = generateMap();
+	//initCursor();
 
 	do
 	{
-		placeMines(board);
-		printMap(board);
-		refresh();
 		if ((ch = getch()) == 'q')
 			break;
+		getInput(ch);
+		placeMines(board);
+		printMap(board);
+		updateCursor(cursor, board);
+		refresh();
 	}	while (true);
 	endwin();	
 

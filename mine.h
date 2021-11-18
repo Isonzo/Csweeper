@@ -12,13 +12,18 @@ typedef struct Tile
 	int mines_around;
 }Tile;
 
+typedef struct Pos
+{
+	int y;
+	int x;
+}Pos;
+
 // mine.c functions
 Tile** generateMap(void);
 void printMap(Tile** map);
 void placeMines(Tile** map);
-
-// externs
-extern Tile ** board;
-extern int MAP_HEIGHT;
-extern int MAP_WIDTH;
+void getInput(char ch);
+Pos* centerPosition(Pos* position);
+void initCursor(Pos* position, Tile** map);
+void updateCursor(Pos* cursor, Tile** map);
 

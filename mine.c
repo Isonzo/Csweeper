@@ -2,8 +2,8 @@
 #include <curses.h>
 #include <stdio.h>
 
-int MAP_HEIGHT = 8;
-int MAP_WIDTH = 12;
+int MAP_HEIGHT = 12;
+int MAP_WIDTH = 20;
 
 Tile** generateMap(void)
 {
@@ -16,7 +16,7 @@ Tile** generateMap(void)
 	}
 
 	for (int i = 0; i < MAP_HEIGHT; ++i)
-		for (int j = 0; j < MAP_HEIGHT; ++j)
+		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
 			map[i][j].is_mine = false;
 			map[i][j].is_flagged = false;
@@ -30,7 +30,7 @@ Tile** generateMap(void)
 void printMap(Tile** map)
 {
 	for (int i = 0; i < MAP_HEIGHT; ++i)
-		for (int j = 0; j < MAP_HEIGHT; ++j)
+		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
 			mvaddch(i, j, map[i][j].icon);
 		}
@@ -39,7 +39,7 @@ void printMap(Tile** map)
 void placeMines(Tile** map)
 {
 	for (int i = 0; i < MAP_HEIGHT; ++i)
-		for (int j = 0; j < MAP_HEIGHT; ++j)
+		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
 			if (rand() % 8 == 0)
 			{
@@ -47,4 +47,37 @@ void placeMines(Tile** map)
 				map[i][j].icon = '*';
 			}
 		}
+}
+
+void getInput(char ch)
+{
+	switch (ch)
+	{
+		case 'j':
+			break;
+		case 'k':
+			break;
+		case 'l':
+			break;
+		case 'h':
+			break;
+	}
+}
+
+Pos* centerPosition(Pos* position)
+{
+	position->y = MAP_HEIGHT / 2;
+	position->x = MAP_WIDTH / 2;
+
+	return position;
+}
+
+void initCursor(Pos* cursor, Tile** map)
+{
+	cursor = centerPosition(cursor);
+}
+
+void updateCursor(Pos* cursor, Tile** map)
+{
+	map[cursor->y][cursor->x].icon = 'C';
 }
