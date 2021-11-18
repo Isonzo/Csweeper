@@ -44,7 +44,6 @@ void placeMines(Tile** map)
 			if (rand() % 6 == 0)
 			{
 				map[i][j].is_mine = true;
-				map[i][j].icon = '*';
 			}
 		}
 }
@@ -66,7 +65,10 @@ bool getInput(char ch, Pos* cursor, Tile** map)
 			moveCursor(0, -1, cursor);
 			break;
 		case ' ':
-			return selectTile(cursor, map);
+			if (!(selectTile(cursor, map)))
+			{
+				// Do the following if we get blown up
+			}
 			break;
 	}
 	return true;
@@ -83,7 +85,10 @@ void moveCursor(int new_y, int new_x, Pos* cursor)
 bool selectTile(Pos* cursor, Tile** map)
 {
 	if (is_tile_mine(cursor, map))
-		return false; // TODO: Game over!
+	{
+		map[cursor->y][cursor->x].icon = '*';
+		return false;
+	}
 	int mine_count = 0;
 	// check surrounding tiles and take appropiate action
 	for (int i = -1; i <= 1; ++i)

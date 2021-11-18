@@ -22,11 +22,12 @@ int main()
 
 	while (true)
 	{
-		getInput(ch, cursor, board);
-		printw("%d, %d", cursor->x, cursor->y);
-		printMap(board);
-		updateCursor(cursor, board);
-		refresh();
+		if (getInput(ch, cursor, board))
+				{
+					printMap(board);
+					updateCursor(cursor, board);
+					refresh();
+				}
 		if ((ch = getch()) == 'q')
 			break;
 	}
