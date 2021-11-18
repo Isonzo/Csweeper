@@ -41,7 +41,7 @@ void placeMines(Tile** map)
 	for (int i = 0; i < MAP_HEIGHT; ++i)
 		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
-			if (rand() % 8 == 0)
+			if (rand() % 6 == 0)
 			{
 				map[i][j].is_mine = true;
 				map[i][j].icon = '*';
@@ -49,7 +49,7 @@ void placeMines(Tile** map)
 		}
 }
 
-void getInput(char ch, Pos* cursor, Tile** map)
+bool getInput(char ch, Pos* cursor, Tile** map)
 {
 	switch (ch)
 	{
@@ -66,9 +66,10 @@ void getInput(char ch, Pos* cursor, Tile** map)
 			moveCursor(0, -1, cursor);
 			break;
 		case ' ':
-			selectTile(cursor, map);
+			return selectTile(cursor, map);
 			break;
 	}
+	return true;
 }
 
 void moveCursor(int new_y, int new_x, Pos* cursor)
@@ -79,10 +80,10 @@ void moveCursor(int new_y, int new_x, Pos* cursor)
 		cursor->x += new_x;
 }
 
-void selectTile(Pos* cursor, Tile** map)
+bool selectTile(Pos* cursor, Tile** map)
 {
 	if (is_tile_mine(cursor, map))
-		return; // TODO: Game over!
+		return false; // TODO: Game over!
 	int mine_count = 0;
 	// check surrounding tiles and take appropiate action
 	for (int i = -1; i <= 1; ++i)
@@ -98,15 +99,38 @@ void selectTile(Pos* cursor, Tile** map)
 		}
 	char total_surround_mines = mine_count + '0';
 	map[cursor->y][cursor->x].icon = total_surround_mines;
+
+	// If 0, automatically select all surrounding tiles
+	if (mine_count == 0)
+	{
+	for (int i = -1; i <= 1; ++i)
+		for (int j = -1; j <= 1; ++j)
+		{
+		// Let's avoid repeat checks
+		Pos temp_cursor = *cursor;
+		temp_cursor.y += i;
+		temp_cursor.x += j;
+		if (is_in_bounds(&temp_cursor))
+			if (map[temp_cursor.y][temp_cursor.x].icon == '#')
+				selectTile(&temp_cursor, map);
+		}
+	}
+	return true;
+}
+
+bool is_in_bounds(Pos* position)
+{
+	if ((position->y < 0 || position->y  >= MAP_HEIGHT))
+		return false;
+	if ((position->x < 0 || position->x  >= MAP_WIDTH))
+		return false;
+	return true;
 }
 
 bool is_tile_mine(Pos* cursor, Tile** map)
 {
-	if ((cursor->y < 0 || cursor->y  >= MAP_HEIGHT))
-		return false;
-	if ((cursor->x < 0 || cursor->x  >= MAP_WIDTH))
-		return false;
-	return map[cursor->y][cursor->x].is_mine;
+	if (is_in_bounds(cursor))
+		return map[cursor->y][cursor->x].is_mine;
 }
 
 Pos* centerPosition(Pos* position)
