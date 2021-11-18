@@ -49,19 +49,31 @@ void placeMines(Tile** map)
 		}
 }
 
-void getInput(char ch)
+void getInput(char ch, Pos* cursor)
 {
 	switch (ch)
 	{
 		case 'j':
+			moveCursor(1, 0, cursor);
 			break;
 		case 'k':
+			moveCursor(-1, 0, cursor);
 			break;
 		case 'l':
+			moveCursor(0, 1, cursor);
 			break;
 		case 'h':
+			moveCursor(0, -1, cursor);
 			break;
 	}
+}
+
+void moveCursor(int new_y, int new_x, Pos* cursor)
+{
+	if (!(cursor->y + new_y < 0 || cursor->y + new_y >= MAP_HEIGHT))
+		cursor->y += new_y;
+	if (!(cursor->x + new_x < 0 || cursor->x + new_x >= MAP_WIDTH))
+		cursor->x += new_x;
 }
 
 Pos* centerPosition(Pos* position)

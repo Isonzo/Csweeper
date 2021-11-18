@@ -1,4 +1,5 @@
 #include "mine.h"
+#include <stdio.h>
 #include <time.h>
 int main()
 {	
@@ -16,15 +17,16 @@ int main()
 	cursor->y = 1;
 	cursor->x = 1;
 	board = generateMap();
+	placeMines(board);
 	//initCursor();
 
 	do
 	{
 		if ((ch = getch()) == 'q')
 			break;
-		getInput(ch);
-		placeMines(board);
 		printMap(board);
+		getInput(ch, cursor);
+		printw("%d, %d", cursor->x, cursor->y);
 		updateCursor(cursor, board);
 		refresh();
 	}	while (true);
