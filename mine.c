@@ -64,6 +64,9 @@ bool getInput(char ch, Pos* cursor, Tile** map)
 		case 'h':
 			moveCursor(0, -1, cursor);
 			break;
+		case 'f':
+			toggleFlag(cursor, map);
+			break;
 		case ' ':
 			if (!(selectTile(cursor, map)))
 			{
@@ -89,6 +92,8 @@ bool selectTile(Pos* cursor, Tile** map)
 		map[cursor->y][cursor->x].icon = '*';
 		return false;
 	}
+	if (is_tile_flagged(cursor, map))
+		return true;
 	int mine_count = 0;
 	// check surrounding tiles and take appropiate action
 	for (int i = -1; i <= 1; ++i)
@@ -123,6 +128,20 @@ bool selectTile(Pos* cursor, Tile** map)
 	return true;
 }
 
+void toggleFlag(Pos* cursor, Tile** map)
+{
+	if (is_tile_flagged(cursor, map))
+	{
+		map[cursor->y][cursor->x].is_flagged = false;
+		map[cursor->y][cursor->x].icon = '#';
+	}
+	else if (map[cursor->y][cursor->x].icon == '#')
+	{
+		map[cursor->y][cursor->x].is_flagged = true;
+		map[cursor->y][cursor->x].icon = 'F';
+	}
+}
+
 bool is_in_bounds(Pos* position)
 {
 	if ((position->y < 0 || position->y  >= MAP_HEIGHT))
@@ -132,10 +151,18 @@ bool is_in_bounds(Pos* position)
 	return true;
 }
 
+bool is_tile_flagged(Pos* cursor, Tile** map)
+{
+	if (is_in_bounds(cursor))
+		return map[cursor->y][cursor->x].is_flagged;
+	return false;
+}
+
 bool is_tile_mine(Pos* cursor, Tile** map)
 {
 	if (is_in_bounds(cursor))
 		return map[cursor->y][cursor->x].is_mine;
+	return false;
 }
 
 Pos* centerPosition(Pos* position)
