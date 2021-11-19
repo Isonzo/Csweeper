@@ -29,6 +29,8 @@ int main()
 					updateCursor(cursor, board);
 					refresh();
 					game_won = isGameWon(board);
+					if (game_won)
+						break;
 				}
 		else
 		{

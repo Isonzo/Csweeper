@@ -2,8 +2,8 @@
 #include <curses.h>
 #include <stdio.h>
 
-int MAP_HEIGHT = 12;
-int MAP_WIDTH = 20;
+int MAP_HEIGHT = 16;
+int MAP_WIDTH = 16;
 
 Tile** generateMap(void)
 {
