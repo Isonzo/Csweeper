@@ -8,6 +8,7 @@ int main()
 	char ch = '0';
 	Tile** board;
 	Pos* cursor;
+	bool game_won = false;
 
 	// ncurses init functions
 	initscr();
@@ -20,16 +21,30 @@ int main()
 	board = generateMap();
 	placeMines(board);
 
-	while (true)
+	while (!game_won)
 	{
 		if (getInput(ch, cursor, board))
 				{
 					printMap(board);
 					updateCursor(cursor, board);
 					refresh();
+					game_won = isGameWon(board);
 				}
+		else
+		{
+			clear();
+			printw("You've been blown to pieces...");
+			getch();
+			break;
+		}
 		if ((ch = getch()) == 'q')
 			break;
+	}
+	if (game_won)
+	{
+		clear();
+		printw("You won!");
+		getch();
 	}
 	endwin();	
 

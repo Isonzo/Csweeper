@@ -68,11 +68,7 @@ bool getInput(char ch, Pos* cursor, Tile** map)
 			toggleFlag(cursor, map);
 			break;
 		case ' ':
-			if (!(selectTile(cursor, map)))
-			{
-				// Do the following if we get blown up
-			}
-			break;
+			return selectTile(cursor, map);
 	}
 	return true;
 }
@@ -176,4 +172,19 @@ Pos* centerPosition(Pos* position)
 void updateCursor(Pos* cursor, Tile** map)
 {
 	move(cursor->y, cursor->x);
+}
+
+bool isGameWon(Tile** map)
+{
+	for (int i = 0; i < MAP_HEIGHT; ++i)
+		for (int j = 0; j < MAP_WIDTH; ++j)
+		{
+			if (map[i][j].icon == '#')	
+				return false;
+			if (map[i][j].is_mine && !map[i][j].is_flagged)
+			{
+				return false;
+			}
+		}
+	return true;
 }

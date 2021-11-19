@@ -32,4 +32,5 @@ void toggleFlag(Pos* cursor, Tile** map);
 bool is_tile_mine(Pos* cursor, Tile** map);
 Pos* centerPosition(Pos* position);
 void updateCursor(Pos* cursor, Tile** map);
+bool isGameWon(Tile** map);
 
