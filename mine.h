@@ -1,7 +1,6 @@
 #include <stdbool.h>
 #include <ncurses.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 typedef struct Tile
 {

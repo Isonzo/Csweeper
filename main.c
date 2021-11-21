@@ -1,6 +1,4 @@
 #include "mine.h"
-#include <curses.h>
-#include <stdio.h>
 #include <time.h>
 int main()
 {	
@@ -16,7 +14,7 @@ int main()
 	cbreak();
 
 	// minesweeper init functions
-	cursor->y = 1;
+	cursor->y = 8;
 	cursor->x = 1;
 	board = generateMap();
 	placeMines(board);
@@ -25,23 +23,29 @@ int main()
 	{
 		if (getInput(ch, cursor, board))
 				{
+					// update the board
 					printMap(board);
 					updateCursor(cursor, board);
 					refresh();
+
+					// Check if board state is a winning one
 					game_won = isGameWon(board);
 					if (game_won)
 						break;
 				}
 		else
 		{
+			// If getInput is false, it means the player has lost.
 			clear();
 			printw("You've been blown to pieces...");
 			getch();
 			break;
 		}
+
 		if ((ch = getch()) == 'q')
 			break;
 	}
+	// If player exited the loop having won, be sure to print out that they've won.
 	if (game_won)
 	{
 		clear();

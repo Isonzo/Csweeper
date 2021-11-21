@@ -1,10 +1,10 @@
 #include "mine.h"
-#include <curses.h>
-#include <stdio.h>
 
+// Map size constants - Standard for minesweeper is 16x16
 int MAP_HEIGHT = 16;
 int MAP_WIDTH = 16;
 
+// Generate the map according to the constants.
 Tile** generateMap(void)
 {
 	Tile** map;
@@ -18,6 +18,7 @@ Tile** generateMap(void)
 	for (int i = 0; i < MAP_HEIGHT; ++i)
 		for (int j = 0; j < MAP_WIDTH; ++j)
 		{
+			// Initialize Tiles
 			map[i][j].is_mine = false;
 			map[i][j].is_flagged = false;
 			map[i][j].is_pressed = false;
@@ -27,6 +28,7 @@ Tile** generateMap(void)
 	return map;
 }
 
+// Prints out given map
 void printMap(Tile** map)
 {
 	for (int i = 0; i < MAP_HEIGHT; ++i)
@@ -36,6 +38,7 @@ void printMap(Tile** map)
 		}
 }
 
+// Randomly places mines in the map.
 void placeMines(Tile** map)
 {
 	for (int i = 0; i < MAP_HEIGHT; ++i)
@@ -48,6 +51,8 @@ void placeMines(Tile** map)
 		}
 }
 
+// Gets player input and does the corresponding action.
+// It returns true if the action doesn't lose the game.
 bool getInput(char ch, Pos* cursor, Tile** map)
 {
 	switch (ch)
@@ -73,6 +78,7 @@ bool getInput(char ch, Pos* cursor, Tile** map)
 	return true;
 }
 
+// Moves cursor to new relative position as long as it doesn't go out of bounds.
 void moveCursor(int new_y, int new_x, Pos* cursor)
 {
 	if (!(cursor->y + new_y < 0 || cursor->y + new_y >= MAP_HEIGHT))
@@ -81,6 +87,9 @@ void moveCursor(int new_y, int new_x, Pos* cursor)
 		cursor->x += new_x;
 }
 
+// Chooses tile and checks if it's a mine, returns returns true if it's safe.
+// It also changes the tile into the number of mines around.
+// If the amount of mines around is 0, it selects all the tiles around it as well, recursively.
 bool selectTile(Pos* cursor, Tile** map)
 {
 	if (is_tile_mine(cursor, map))
@@ -124,6 +133,7 @@ bool selectTile(Pos* cursor, Tile** map)
 	return true;
 }
 
+// Flags or unflags tile under cursor.
 void toggleFlag(Pos* cursor, Tile** map)
 {
 	if (is_tile_flagged(cursor, map))
@@ -138,6 +148,7 @@ void toggleFlag(Pos* cursor, Tile** map)
 	}
 }
 
+// Function to check if a certain position is in bounds.
 bool is_in_bounds(Pos* position)
 {
 	if ((position->y < 0 || position->y  >= MAP_HEIGHT))
@@ -147,6 +158,7 @@ bool is_in_bounds(Pos* position)
 	return true;
 }
 
+// Function that checks if tile under cursor is flagged.
 bool is_tile_flagged(Pos* cursor, Tile** map)
 {
 	if (is_in_bounds(cursor))
@@ -154,6 +166,7 @@ bool is_tile_flagged(Pos* cursor, Tile** map)
 	return false;
 }
 
+// Function that checks if tile under cursor is a mine.
 bool is_tile_mine(Pos* cursor, Tile** map)
 {
 	if (is_in_bounds(cursor))
@@ -161,6 +174,7 @@ bool is_tile_mine(Pos* cursor, Tile** map)
 	return false;
 }
 
+// Funtion that centers a Pos* type, to be used with cursor.
 Pos* centerPosition(Pos* position)
 {
 	position->y = MAP_HEIGHT / 2;
@@ -169,11 +183,15 @@ Pos* centerPosition(Pos* position)
 	return position;
 }
 
+// Makes ncurses cursor reflect cursor's position.
 void updateCursor(Pos* cursor, Tile** map)
 {
 	move(cursor->y, cursor->x);
 }
 
+// Check board state to see if the game is won.
+// Game is won if all tiles have been checked, and all tiles are either completely free
+// or flagged with a mine underneath.
 bool isGameWon(Tile** map)
 {
 	for (int i = 0; i < MAP_HEIGHT; ++i)
